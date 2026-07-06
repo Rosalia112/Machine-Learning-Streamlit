@@ -1,4 +1,3 @@
-from __future__ import print_function
 
 import IPython
 print('IPython:', IPython.__version__)
@@ -8,12 +7,10 @@ print('numpy:', numpy.__version__)
 
 import pandas
 print('pandas:', pandas.__version__)
+from __future__ import print_function
 
 import sklearn
 print('scikit-learn:', sklearn.__version__)
-
-from sklearn.datasets import load_iris
-iris = load_iris()
 
 #mengetahui tipe data
 X, y = iris.data, iris.target
