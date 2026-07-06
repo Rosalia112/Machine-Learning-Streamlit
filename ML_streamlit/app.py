@@ -1,4 +1,3 @@
-
 import IPython
 print('IPython:', IPython.__version__)
 
