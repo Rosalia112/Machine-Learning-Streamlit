@@ -4,6 +4,63 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+print("IPython:", IPython.__version__)
+print("numpy:", np.__version__)
+print("pandas:", pd.__version__)
+print("scikit-learn:", sklearn.__version__)
+
+# 2. Load data iris bawaan dari sklearn
+iris = load_iris()
+
+# 3. Menampilkan tipe data iris & contoh data teratas
+X, y = iris.data, iris.target
+print("\nTipe data X:", type(X))
+print("Contoh 5 data teratas:\n", X[:5])
+print("Contoh 5 label teratas:\n", y[:5])
+
+# 4. Menampilkan data pandas dataframe nya
+df = pd.DataFrame(iris.data, columns=iris.feature_names)
+df["target"] = iris.target
+print("\n5 Data teratas DataFrame:\n", df.head())
+
+# 5. Lakukan preprocessing (cek data null, duplicat, outlier jika diperlukan)
+
+# 6 & 7. Membuat pipeline (StandardScaler + LinearSVC)
+pipe_numpy = make_pipeline(StandardScaler(), LinearSVC())
+pipe_pandas = make_pipeline(StandardScaler(), LinearSVC())
+
+# 8. Melakukan splitting data train dengan data tes (test_size=0.2, random_state=46)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=46
+)
+df_train, df_test = train_test_split(df, test_size=0.2, random_state=46)
+
+# 9. Melakukan training & menampilkan hasil evaluasi untuk numpy array
+print("\n--- Training Model Numpy ---")
+pipe_numpy.fit(X_train, y_train)
+y_pred = pipe_numpy.predict(X_test)
+print(classification_report(y_test, y_pred))
+
+# 10. Melakukan training & menampilkan hasil evaluasi untuk pandas dataframe
+print("\n--- Training Model Pandas ---")
+X_train_df, y_train_df = df_train.drop("target", axis=1), df_train["target"]
+X_test_df, y_test_df = df_test.drop("target", axis=1), df_test["target"]
+
+pipe_pandas.fit(X_train_df, y_train_df)
+y_pred_df = pipe_pandas.predict(X_test_df)
+print(classification_report(y_test_df, y_pred_df))
+
+# 11. Simpan model yang sudah dibuat ke file .pkl
+# Menyimpan model numpy
+with open("model_numpy.pkl", "wb") as f:
+    pickle.dump(pipe_numpy, f)
+
+# Menyimpan model pandas
+with open("model_pandas.pkl", "wb") as model_file:
+    pickle.dump(pipe_pandas, model_file)
+
+print("\nModel numpy dan pandas berhasil disimpan!")
+
 # Load data iris untuk mengambil nama fitur
 iris = load_iris()
 
